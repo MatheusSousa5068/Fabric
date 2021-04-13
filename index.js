@@ -1,7 +1,7 @@
 const { Client } = require('pg')
 
 const client = new Client({
-    user: "matheus",
+    user: "postgres",
     password: "root",
     host: "localhost",
     port: 8080,
@@ -13,6 +13,9 @@ async function execute() {
     try {
       await client.connect();
       console.log("Connected succesfully");
+
+      const results = await client.query("select * from funcionario")
+      console.table(results.rows)
     } 
     
     catch (e) {
