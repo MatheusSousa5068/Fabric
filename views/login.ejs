@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+      integrity="sha512-5fsy+3xG8N/1PV5MIJz9ZsWpkltijBI48gBzQ/Z2eVATePGHOkMIn+xTDHIfTZFVb9GMpflF2wOWItqxAP2oLQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Fabric | Login</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inconsolata&display=swap");
+
+      * {
+        font-family: "Inconsolata", cursive;
+      }
+
+      body {
+        background-color: #144f4f;
+      }
+
+      form {
+        position: absolute;
+        width: 700px;
+        height: 550px;
+        left: 28%;
+        top: 131px;
+        background: #ffffff;
+        border-radius: 25px;
+        padding-left: 25px;
+      }
+
+      h1 {
+        font-weight: normal;
+        font-size: 48px;
+        line-height: 56px;
+        margin-bottom: 25px;
+        padding-top: 25px;
+        color: #2c1a4d;
+      }
+
+      #email {
+        box-shadow: 0 0 1em black;
+        position: absolute;
+        width: 78%;
+        height: 38px;
+        left: 25px;
+        top: 165px;
+        background: #f0f0f5;
+      }
+
+      #password {
+        box-shadow: 0 0 1em black;
+        position: absolute;
+        width: 78%;
+        height: 38px;
+        left: 25px;
+        top: 225px;
+        background: #f0f0f5;
+        top: 289px;
+      }
+
+      #email-label {
+        font-size: 24px;
+        line-height: 28px;
+        color: #2c1a4d;
+        padding-top: 18px;
+      }
+
+      #password-label {
+        font-size: 24px;
+        line-height: 28px;
+        color: #2c1a4d;
+        padding-top: 90px;
+      }
+
+      #login {
+        margin-top: 109px;
+        margin-left: 40%;
+        color: #2c1a4d;
+      }
+
+      .register-div {
+        margin-top: 24px;
+        margin-left: 182px;
+      }
+
+      a {
+        color: #1EAEDB
+      }
+
+      ul {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <% if(messages.success_msg) { %>
+      <li><%= messages.success_msg %></li>
+      <% } %>
+    </ul>
+
+    <ul>
+      <% if(messages.error) { %>
+      <li><%= messages.error %></li>
+      <% } %>
+    </ul>
+
+    <form action="/users/login" method="POST">
+      <h1>Login</h1>
+      <div>
+        <label for="email" id="email-label">Insira seu Email</label>
+
+        <input type="email" id="email" name="email" required />
+      </div>
+
+      <div>
+        <label for="password" id="password-label">Insira sua Senha</label>
+
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div>
+        <input type="submit" value="Login" id="login" />
+      </div>
+
+      <div class="register-div">
+        <a href="/users/register">Ainda não se registrou? Cadastre-se Aqui!</a>
+      </div>
+    </form>
+  </body>
+</html>

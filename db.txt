@@ -1,0 +1,23 @@
+projeto anterior
+create table consumidor (
+cpf varchar(20),
+nome varchar(200),
+email varchar(200),
+telefone varchar(20),
+senha varchar(200) not null
+);
+
+
+create table pedido (
+codped serial,
+pedido varchar(200),
+descped varchar(100),
+tipo_projet varchar(20),
+orcamento integer);
+
+create table cli_ped(
+cpf varchar(20),
+codped serial);
+
+ALTER TABLE consumidor add CONSTRAINT PK_cpf PRIMARY key(cpf);
+ALTER TABLE pedido add CONSTRAINT PK_ped PRIMARY key(codped);
