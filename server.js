@@ -9,22 +9,22 @@ const passport = require("passport")
 
 const initializePassport = require('./passportConfig')
 
+
 initializePassport(passport)
 
 const PORT = process.env.PORT || 5052
 
 app.set('view engine', 'ejs')
-app.use(express.urlencoded({ extended: false}))
 app.use(session({
     secret: 'secret',
     resave: false,
     saveUninitialized: false
 }))
 app.use(express.json())
+app.use(express.urlencoded({ extended: false}))
 
 app.use(passport.initialize())
 app.use(passport.session())
-
 app.use(flash())
 
 
@@ -160,12 +160,11 @@ async function connect() {
 async function criarPedido(reqJson) {
     try {
         await pool.query(
-            "insert into pedido (pedido, descped, tipo_projet, orcamento) values ($1, $2, $3, $4)",
+            "insert into pedido (pedido, descped, tipo_projet) values ($1, $2, $3)",
             [
                 reqJson.nomeProduto,
                 reqJson.descProduto,
-                reqJson.tipoProduto,
-                reqJson.orcamento
+                reqJson.tipoProduto
             ])
        
         
@@ -236,6 +235,27 @@ app.delete('/pedidos', async (req, res) => {
 
 })
 
+var bodyParser = require('body-parser')
+app.use(bodyParser())
+
+
+
+
+app.post('/funcionario/pedido', async (req, res) => {
+    let result = 0
+    try {
+        let { id } = req.body
+        console.log(id)
+
+        result.success = true
+    } catch (e) {
+        result.success = false
+    } finally {
+        res.setHeader("content-type", "application/json")
+        res.send(JSON.stringify(result))
+    }
+})
+
                                             // Rotas de html
                          
                                             
@@ -266,5 +286,8 @@ app.get('/funcionario', (req, res) => {
     res.sendFile(`${__dirname}/server/index.html`)
 })
 
+app.get('/funcionario/pedido', (req, res) => {
+    res.sendFile(`${__dirname}/server/pedido.html`)
+})
 
 app.listen(PORT, () => console.log(`server running at localhost:${PORT}`))

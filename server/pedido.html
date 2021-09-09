@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabric | Listagem</title>
+</head>
+<body>
+    <ul id='olPedido'>
+        <br>
+    </ul>
+
+    <script>
+        readTodos();
+        async function readTodos() {
+                const br = document.createElement('br')
+
+            try {
+                const olPedido = document.getElementById("olPedido")
+
+                while (olPedido.firstChild) {
+                    olPedido.removeChild(olPedido.firstChild)
+                }
+
+
+                const results = await fetch("http://localhost:5052/pedidos", {
+                    method: "GET"
+                })
+
+                const pedidos = await results.json()
+                pedidos.forEach(t => {
+                    const li = document.createElement("li")
+
+                    li.id = t.codped
+                    li.textContent = `Projeto ${t.codped}: ${t.pedido} => ${t.descped}`
+
+
+        
+
+                    li.addEventListener("click", async (e) => {
+                        await console.log(li.id)
+
+
+                        window.open("http://localhost:5052/funcionario/pedido", "minhaJanela", "height=800,width=800");
+                    })
+                    olPedido.appendChild(li)
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    </script>
+</body>
+</html>

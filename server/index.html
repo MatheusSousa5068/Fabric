@@ -1,98 +1,123 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Fabric | Funcionários</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Inconsolata&display=swap");
 
-        * {
-            font-family: 'Inconsolata', cursive;
-        }
+      * {
+        font-family: "Inconsolata", cursive;
+      }
 
-        body {
-            background-color: #144F4F;
-        }
+      body {
+        background-color: #144f4f;
+      }
 
-        h1 {
-            color: rgba(255, 255, 255, 0.904);
-            display: flex;
-            justify-content: center;
-            font-size: 50px;
-        }
+      h1 {
+        color: rgba(255, 255, 255, 0.904);
+        display: flex;
+        justify-content: center;
+        font-size: 50px;
+      }
 
-        ul {
-            list-style: none;
-            line-height: 2;
-        }
+      ul {
+        list-style: none;
+        line-height: 2;
+      }
 
-        li {
-            color: #e6cfcf;
-            font-size: 25px;
-        }
+      li {
+        color: #e6cfcf;
+        font-size: 25px;
+      }
 
-        p {
-            font-size: 25px;
-            display: contents;
-        }
+      p {
+        font-size: 25px;
+        display: contents;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Projetos encomendados</h1>
-    <ul id='olPedido'>
 
+    <ul id="olPedido">
+      <form id="form"></form>
     </ul>
 
     <script>
-        readTodos();
-        async function readTodos() {
+      readTodos();
+      async function readTodos() {
+        try {
+          const olPedido = document.getElementById("olPedido");
 
-            try {
-                const olPedido = document.getElementById("olPedido")
+          while (olPedido.firstChild) {
+            olPedido.removeChild(olPedido.firstChild);
+          }
 
-                while (olPedido.firstChild) {
-                    olPedido.removeChild(olPedido.firstChild)
+          const results = await fetch("http://localhost:5052/pedidos", {
+            method: "GET",
+          });
+
+          const pedidos = await results.json();
+          pedidos.forEach((t) => {
+            const li = document.createElement("li");
+
+            li.id = t.codped;
+            li.textContent = `Projeto ${t.codped}: ${t.pedido}`;
+
+            /*
+                                li.addEventListener("click", async e => {
+                                    const jsonRequest = {}
+                                    jsonRequest.id = e.target.id;
+                                    let result = await fetch("http://localhost:5052/pedidos", {
+                                        method: "DELETE",
+                                        headers: {
+                                            "content-type": "application/json"
+                                        },
+                                        body: JSON.stringify(jsonRequest)
+                                    })
+
+                                    readTodos();
+                                    if (!result.success) alert("FAILED! ")
+
+                                })*/
+
+            li.addEventListener("click", async (e) => {
+              const jsonRequest = {}
+              jsonRequest.id = t.codped
+            
+
+              let result = await fetch(
+                "http://localhost:5052/funcionario/pedido",
+                {
+                  method: "POST",
+
+                  body: JSON.stringify(jsonRequest),
                 }
+              );
+              console.log(jsonRequest);
+              console.log(JSON.stringify(jsonRequest));
+              
+              /*
+              window.open(
+                "http://localhost:5052/funcionario/pedido",
+                "minhaJanela",
+                "height=800,width=800"
+              );
+              */
+            });
 
 
-                const results = await fetch("http://localhost:5050/pedidos", {
-                    method: "GET"
-                })
+            olPedido.appendChild(li);
 
-                const pedidos = await results.json()
-                pedidos.forEach(t => {
-                    const li = document.createElement("li")
-
-                    li.id = t.codped
-                    li.textContent = `Projeto ${t.codped}: ${t.pedido} - ${t.descped}`
-
-                    li.addEventListener("click", async e => {
-                        const jsonRequest = {}
-                        jsonRequest.id = e.target.id;
-                        let result = await fetch("http://localhost:5050/pedidos", {
-                            method: "DELETE",
-                            headers: {
-                                "content-type": "application/json"
-                            },
-                            body: JSON.stringify(jsonRequest)
-                        })
-                        result = await result.json();
-                        readTodos();
-                        if (!result.success) alert("FAILED! ")
-
-                    })
-
-                    olPedido.appendChild(li)
-                })
-            } catch (e) {
-                console.log(e)
-            }
+          });
+        } catch (e) {
+          console.log(e);
         }
+      }
     </script>
-</body>
-
+  </body>
 </html>
