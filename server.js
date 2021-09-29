@@ -1,11 +1,13 @@
 const express = require('express')
 const app = express()
 
-const { pool } = require('./dbConfig')
+const {
+    pool
+} = require('./dbConfig')
 const bcrypt = require('bcrypt')
 const session = require('express-session')
 const flash = require('express-flash')
-const passport = require("passport")
+const passport = require('passport')
 
 const initializePassport = require('./passportConfig')
 
@@ -14,6 +16,9 @@ initializePassport(passport)
 
 const PORT = process.env.PORT || 5052
 
+app.use( express.static( "public" ) );
+
+
 app.set('view engine', 'ejs')
 app.use(session({
     secret: 'secret',
@@ -21,7 +26,9 @@ app.use(session({
     saveUninitialized: false
 }))
 app.use(express.json())
-app.use(express.urlencoded({ extended: false}))
+app.use(express.urlencoded({
+    extended: true
+}))
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -41,7 +48,9 @@ app.get('/users/login', checkAutheticated, (req, res) => {
 })
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
-    res.render("dashboard", { user: req.user.nome})
+    res.render('dashboard', {
+        user: req.user.nome
+    })
 })
 
 app.get('/users/logout', (req, res) => {
@@ -51,7 +60,14 @@ app.get('/users/logout', (req, res) => {
 })
 
 app.post('/users/register', async (req, res) => {
-    let { cpf, nome, email, telefone, senha, senha2 } = req.body
+    let {
+        cpf,
+        nome,
+        email,
+        telefone,
+        senha,
+        senha2
+    } = req.body
 
     console.log({
         cpf,
@@ -65,19 +81,27 @@ app.post('/users/register', async (req, res) => {
     let errors = []
 
     if (!cpf || !nome || !email || !telefone || !senha || !senha2) {
-        errors.push({message: "Please enter all fields"})
+        errors.push({
+            message: "Please enter all fields"
+        })
     }
 
     if (senha.length < 6) {
-        errors.push({message: "Password must be at least 6 characters"})
+        errors.push({
+            message: "Password must be at least 6 characters"
+        })
     }
 
     if (senha != senha2) {
-        errors.push({message: "Passwords do not match"})
+        errors.push({
+            message: "Passwords do not match"
+        })
     }
 
     if (errors.length > 0) {
-        res.render('register', { errors })
+        res.render('register', {
+            errors
+        })
     } else {
         let hashedPassowrd = await bcrypt.hash(senha, 10)
         console.log(hashedPassowrd)
@@ -94,8 +118,12 @@ app.post('/users/register', async (req, res) => {
 
 
                 if (results.rows.length > 0) {
-                    errors.push({ message: "Email aready registered"})
-                    res.render('register', { errors })
+                    errors.push({
+                        message: "Email aready registered"
+                    })
+                    res.render('register', {
+                        errors
+                    })
                 } else {
                     pool.query(
                         `INSERT INTO consumidor (cpf, nome, email, telefone, senha)
@@ -110,7 +138,7 @@ app.post('/users/register', async (req, res) => {
                         }
                     )
                 }
-            } 
+            }
         )
     }
 })
@@ -137,7 +165,7 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 
-                                            // Rotas fabric
+// Rotas fabric
 
 
 start()
@@ -160,18 +188,19 @@ async function connect() {
 async function criarPedido(reqJson) {
     try {
         await pool.query(
-            "insert into pedido (pedido, descped, tipo_projet) values ($1, $2, $3)",
+            "insert into pedido (pedido, descped, tipo_projet, concluido) values ($1, $2, $3, $4)",
             [
                 reqJson.nomeProduto,
                 reqJson.descProduto,
-                reqJson.tipoProduto
+                reqJson.tipoProduto,
+                false
             ])
-       
-        
+
+
         await pool.query("insert into cli_ped (cpf) values ($1)", [reqJson.cpf])
     } catch (ex) {
         console.log(`Something wrong happend ${ex}`)
-    } 
+    }
 }
 
 
@@ -179,22 +208,21 @@ async function readTodos() {
     try {
         const results = await pool.query("select * from pedido");
         return results.rows;
-    }
-    catch(e){
+    } catch (e) {
         return [];
     }
 }
 
 
-async function deleteTodo (codped){
+async function deleteTodo(codped) {
     try {
         await pool.query("delete from pedido where codped = $1", [codped]);
         return true
-    }catch(e){
-        return false;        
+    } catch (e) {
+        return false;
     }
 }
-                                            // Rotas
+// Rotas
 
 // rotas do crud
 app.get('/pedidos', async (req, res) => {
@@ -235,30 +263,64 @@ app.delete('/pedidos', async (req, res) => {
 
 })
 
-var bodyParser = require('body-parser')
-app.use(bodyParser())
 
 
-
-
-app.post('/funcionario/pedido', async (req, res) => {
+/*
+app.post('/funcionario/pedido', async (req, res, next) => {
     let result = 0
-    try {
-        let { id } = req.body
-        console.log(id)
+    res.setHeader("content-type", "application/json")
 
-        result.success = true
-    } catch (e) {
-        result.success = false
-    } finally {
-        res.setHeader("content-type", "application/json")
-        res.send(JSON.stringify(result))
-    }
+
+    let {
+        id
+    } = req.body
+
+    const vitoria = await pool.query("select * from pedido where codped = $1", [1])
+
+    
+    vitoriarows = vitoria.rows
+
+    
+
+    result.success = true
+    res.locals.titulo = vitoriarows;
+    next()
+})
+*/
+
+app.get('/dbConfig', (req, res) => {
+    res.render(`${__dirname}/dbConfig.js`)
 })
 
-                                            // Rotas de html
-                         
-                                            
+app.post('/funcionario/pedido', async (req, res, next) => {
+
+    let result = 0
+    res.setHeader("content-type", "application/json")
+
+
+
+    let id = req.body.id
+   let { concluido } = req.body
+
+    if(req.body.concluido == true) {
+        await pool.query("update pedido set concluido = true where codped = $1", [id])  
+        console.log(concluido)  
+    } else if (!req.body.concluido) {
+        
+    }
+
+    const vitoria = await pool.query("select * from pedido where codped = $1", [id])
+
+
+    vitoriarows = vitoria.rows
+
+    result.success = true
+    res.send(vitoriarows)
+})
+
+// Rotas de html
+
+
 
 // rota da mainpage
 app.get('/home', checkNotAuthenticated, (req, res) => {
@@ -286,8 +348,33 @@ app.get('/funcionario', (req, res) => {
     res.sendFile(`${__dirname}/server/index.html`)
 })
 
-app.get('/funcionario/pedido', (req, res) => {
-    res.sendFile(`${__dirname}/server/pedido.html`)
+app.get('/funcionario/pedido', (req, res, next) => {
+    /*res.sendFile(`${__dirname}/views/pedido.ejs`)
+    let values = req.query
+    res.send(values)
+    res.locals.func = async function readTodo(id) {
+        const ped = await pool.query("select * from pedido where codped = $1", [id])
+        
+        console.table(ped.rows)
+    }*/
+    async function readTodo(id) {
+        const ped = await pool.query("select * from pedido where codped = $1", [id])
+
+        return ped.rows
+    }
+
+
+    res.render(__dirname + '/views' + '/pedido.ejs', {
+        readTodo: readTodo,
+        async: true
+    })
+
+
+})
+
+
+app.get('/mostruario', (req, res) => {
+    res.sendFile(`${__dirname}/client/mostruario.html`)
 })
 
 app.listen(PORT, () => console.log(`server running at localhost:${PORT}`))

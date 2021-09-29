@@ -86,33 +86,42 @@
                                 })*/
 
             li.addEventListener("click", async (e) => {
-              const jsonRequest = {}
-              jsonRequest.id = t.codped
-            
+              e.preventDefault();
 
+              const jsonRequest = {};
+              jsonRequest.id = e.target.id;
+
+              /*
               let result = await fetch(
                 "http://localhost:5052/funcionario/pedido",
                 {
                   method: "POST",
-
+                  headers: {
+                    "content-type": "application/json",
+                  },
                   body: JSON.stringify(jsonRequest),
                 }
-              );
-              console.log(jsonRequest);
-              console.log(JSON.stringify(jsonRequest));
               
-              /*
+              
+                );
+                /*
               window.open(
                 "http://localhost:5052/funcionario/pedido",
                 "minhaJanela",
                 "height=800,width=800"
-              );
-              */
-            });
+              );*/
 
+
+              var params = new URLSearchParams()
+              params.append("json", JSON.stringify(jsonRequest))
+
+
+              location.href = "http://localhost:5052/funcionario/pedido?" + params.toString()
+            });
+            
+            
 
             olPedido.appendChild(li);
-
           });
         } catch (e) {
           console.log(e);

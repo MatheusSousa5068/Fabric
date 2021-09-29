@@ -14,6 +14,9 @@
 
       body {
         background-color: #1b5050;
+        font-family: "Roboto", sans-serif;
+        overflow-x: hidden;
+        overflow-y: hidden;
       }
 
       h2 {
@@ -30,17 +33,18 @@
         margin-top: 285px;
         color: #fff;
         font-size: 20px;
-      }
+        margin-top: 280px;
+}
+      
 
       a {
         text-decoration: none;
-        margin: 0;
         color: #fff;
       }
 
       h1 {
-        margin-top: 118px;
-        padding-top: 100px;
+        padding-top: 165px;
+    margin-top: 118px;
         color: rgba(255, 255, 255, 0.904);
         font-size: 50px;
         width: 50%;
@@ -51,8 +55,8 @@
       }
 
       img {
-        width: 15%;
-        margin-left: -50px;
+        width: 69% !important;
+        padding-left: 145px;
       }
 
       div {
@@ -60,11 +64,6 @@
       }
 
       /* global css */
-
-      body {
-        overflow: hidden;
-        font-family: "Roboto", sans-serif;
-      }
 
       nav {
         background-image: url(../normal.png);
@@ -74,7 +73,7 @@
       }
 
       #title {
-        margin-left: 125px;
+        margin-left: 78px;
         padding-top: 10px;
         text-align: left;
         color: #fff;
@@ -83,7 +82,9 @@
       ul {
         list-style-type: none;
         margin-top: -93px;
-        margin-left: 1630px;
+        
+    margin-left: 1290px;
+
         margin-right: -8px;
         padding: 0;
         padding-right: 15px;
@@ -92,64 +93,7 @@
         display: flex;
       }
 
-      li {
-        display: inline;
-        text-align: right;
-      }
-
-      li a,
-      .dropbtn {
-        display: inline-block;
-        color: #fff;
-        padding: 14px 16px;
-        text-decoration: none;
-      }
-
-      li a:hover,
-      .dropdown:hover .dropbtn {
-        background-color: #1d3a2a;
-      }
-
-      li.dropdown {
-        display: inline-block;
-      }
-
-      .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #1d3a2a;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-      }
-
-      .dropdown-content a {
-        color: #fff;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-        text-align: left;
-      }
-
-      .dropdown-content a:hover {
-        background-color: green;
-      }
-
-      .dropdown:hover .dropdown-content {
-        display: block;
-      }
-
-      /* main */
-      #img {
-        background-image: url("../normal.png");
-        background-size: cover;
-        width: 100vw;
-        height: 100vh;
-        margin-left: -8px;
-        margin-top: -50px;
-        opacity: 0.7;
-      }
-
+      
       .centralized {
         display: flex;
         align-items: center;
@@ -165,13 +109,65 @@
 
       #logout {
         background-color: #de1a1a;
-        width: 250px;
+        width: 183px;
         height: 60px;
         border-radius: 5px;
-        margin-top: 285px;
         color: #fff;
         font-size: 20px;
-		margin-left: 1200px;
+        margin-left: 1125px;
+        padding-top: -2px;
+        margin-top: -42px;
+        padding-top: 0px;
+      }
+
+      main {
+        margin: 0 auto;
+        width: 980px;
+        position: relative;
+      }
+
+      .slider {
+        height: 454px;
+      }
+
+      button.slick-prev {
+        font-size: 0px;
+        border: none;
+        width: 25px;
+        height: 51px;
+        z-index: 9;
+        background-color: transparent;
+        position: absolute;
+        background-image: url(../img/anterior.png);
+        top: 35%;
+        left: 14%;
+        outline-style: none;
+      }
+
+      button.slick-next {
+        font-size: 0px;
+        border: none;
+        width: 25px;
+        height: 51px;
+        z-index: 9;
+        background-color: transparent;
+        position: absolute;
+        background-image: url(../img/proximo.png);
+        top: 35%;
+        right: 14%;
+        outline-style: none;
+      }
+
+      .slick-list {
+        width: 100% !important;
+      }
+
+      .slick-list {
+        width: 100% !important;
+      }
+
+      .slick-initialized {
+        overflow: hidden;
       }
     </style>
   </head>
@@ -181,6 +177,7 @@
       <nav>
         <h1 id="title"><a href="/mk">Fabric</a></h1>
         <ul>
+          <li><a href="/mostruario">Mostruário</a></li>
           <li><a href="/ajuda">Ajuda</a></li>
           <li class="right"><a href="/sobre">Sobre</a></li>
         </ul>
@@ -190,7 +187,7 @@
     <h1>O lugar certo para encomendar seu software!</h1>
     <h3>Softwares de excelente qualidade com preços acessíveis!</h3>
 
-    <a href="/pedido">
+    <a href="/pedido" class="pedido">
       <button id="pedido">Faça Seu Pedido 🏍</button>
     </a>
 
@@ -199,5 +196,9 @@
     </a>
 
     <script src="script.js"></script>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/jquery-migrate.js"></script>
+    <script type="text/javascript" src="/js/slick.min.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
   </body>
 </html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fabric | Listagem</title>
+  </head>
+  <body>
+    <% (readTodo(2))  %>
+
+
+
+    <script>
+        document.write(results)
+
+      var params = new URLSearchParams(window.location.search);
+      var json = params.get("json");
+
+      console.log(JSON.parse(json));
+
+      var jsonParse = JSON.parse(json);
+
+      get();
+
+      async function get() {
+        let result = await fetch("http://localhost:5052/funcionario/pedido", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(jsonParse),
+        });
+      }
+
+      async function readTodo(id) {
+        const results = await pool.query(
+          `select * from pedido where codped = $1`,
+          [id]
+        );
+        console.table(results.rows);
+      }
+
+      readTodo(1);
+    </script>
+  </body>
+</html>
